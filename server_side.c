@@ -11,6 +11,7 @@ int init_listen_socket() {
     int server_fd;
     int client_fd;
     struct sockaddr_un server_addr;
+    char buff[1024];
 
     unlink(SOCKET_PATH);
 
@@ -31,7 +32,11 @@ int init_listen_socket() {
 
     socklen_t server_addr_size = sizeof(server_addr);
     while((client_fd = accept(server_fd, (struct sockaddr *) &server_addr, &server_addr_size)) > 0) {
+        memset(buff, 0, sizeof(buff));
         puts("Client connected!");
+
+        read(client_fd, buff, sizeof(buff));
+        printf("%s \n", buff);
     }
 
     return 0;
