@@ -33,7 +33,7 @@ int init_listen_socket() {
     socklen_t server_addr_size = sizeof(server_addr);
     while((client_fd = accept(server_fd, (struct sockaddr *) &server_addr, &server_addr_size)) > 0) {
         memset(buff, 0, sizeof(buff));
-        puts("Client connected!");
+        printf("Client connected with fd: %d\n", client_fd);
 
         read(client_fd, buff, sizeof(buff));
         printf("%s \n", buff);
