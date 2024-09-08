@@ -23,3 +23,9 @@ int init_client_socket() {
     
     return 0;
 }
+
+int main(int argc, char **argv) {
+    if(init_client_socket() < 0)
+        perror("init client socket");
+    return 0;
+}

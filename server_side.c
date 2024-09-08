@@ -12,9 +12,12 @@ int init_listen_socket() {
     int client_fd;
     struct sockaddr_un server_addr;
 
+    unlink(SOCKET_PATH);
+
     if((server_fd = socket(AF_UNIX, SOCK_STREAM, 0)) < 0)
         perror("socket");
     
+    puts("Socket created!");
     memset(&server_addr, 0, sizeof(server_addr));
     server_addr.sun_family = AF_UNIX;
     strcpy(server_addr.sun_path, SOCKET_PATH);
@@ -24,12 +27,18 @@ int init_listen_socket() {
     if(listen(server_fd, 5) < 0)
         perror("listen");
 
-    socklen_t server_addr_size = sizeof(server_addr);
-    while(1) {
-        if((client_fd = accept(server_fd, (struct sockaddr *) &server_addr, &server_addr_size)) < 0)
-            perror("accept");
+    puts("Listening...");
 
+    socklen_t server_addr_size = sizeof(server_addr);
+    while((client_fd = accept(server_fd, (struct sockaddr *) &server_addr, &server_addr_size)) > 0) {
         puts("Client connected!");
     }
+
+    return 0;
+}
+
+int main(int argc, char **argv) {
+    if(init_listen_socket() < 0)
+        perror("init listen socket");
     return 0;
 }
